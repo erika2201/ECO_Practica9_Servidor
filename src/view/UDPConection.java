@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 
 import com.google.gson.Gson;
 
+import events.onMessage;
 import model.Generic;
 import model.Order;
 
@@ -15,6 +16,15 @@ public class UDPConection extends Thread {
 
 	private DatagramSocket socket;
 	private Order order;
+	private onMessage observer;
+	
+	
+	
+	//Método de suscripción, patron observer
+	public void setObserver (onMessage observer) {
+		this.observer = observer;
+	}
+	
 
 	@Override
 	public void run() {
@@ -42,21 +52,24 @@ public class UDPConection extends Thread {
 				switch (generic.item) {
 				case "JUICE":
 					order = gson.fromJson(msg, Order.class);
+					observer.onMessageReceived(order.getItem());//Notifica
 					System.out.println("El cliente quiere: " + order.getItem());
 					break;
 				case "SANDWICH":
 					order = gson.fromJson(msg, Order.class);
+					observer.onMessageReceived(order.getItem());//Notifica
 					System.out.println("El cliente quiere: " + order.getItem());
 					break;
 				case "YOGURT":
 					order = gson.fromJson(msg, Order.class);
+					observer.onMessageReceived(order.getItem());//Notifica
 					System.out.println("El cliente quiere: " + order.getItem());
 					break;
 				case "HOTDOG":
 					order = gson.fromJson(msg, Order.class);
+					observer.onMessageReceived(order.getItem());//Notifica
 					System.out.println("El cliente quiere: " + order.getItem());
 					break;
-
 				default:
 					break;
 				}
