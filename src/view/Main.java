@@ -45,11 +45,27 @@ public class Main extends PApplet implements onMessage {
 
 	public void draw() {
 		image(bg, 0, 0);
-		
-		//Inicializo el for
+
+		// Inicializo el for
 		for (int i = 0; i < food.size(); i++) {
-			food.get(i).draw(x, y+(220*i));
+			food.get(i).draw(x, y + (225 * i));
 		}
+	
+	}
+
+	// Enviar el mensaje cuando pedido está listo
+	public void mousePressed() {
+		for (int i = 0; i < food.size(); i++) {
+
+			if (mouseX > x && mouseX < x + 140 && 
+				mouseY > x + (130 * i) && mouseY < y + (130 * i) + 212) {
+				UDP.sendMessage("Su " + food.get(i).getItem() + " ya está listo");
+				
+				food.remove(i);
+			}
+
+		}
+
 	}
 
 	// Interface de patron observer
