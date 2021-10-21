@@ -25,7 +25,7 @@ public class Main extends PApplet implements onMessage {
 	private int x, y, numOrder;
 
 	public void settings() {
-		size(1200, 700);
+		size(1200, 500);
 	}
 
 	public void setup() {
@@ -42,7 +42,7 @@ public class Main extends PApplet implements onMessage {
 
 		food = new ArrayList<Food>();
 		x = 85;
-		y = 130;
+		y = 180;
 		numOrder = 0;
 	}
 
@@ -51,21 +51,20 @@ public class Main extends PApplet implements onMessage {
 
 		// Inicializo el for
 		for (int i = 0; i < food.size(); i++) {
-			food.get(i).draw(x, y + (225 * i));
+			food.get(i).draw(x + (180 * i), y);
 		}
-	
 	}
 
 	// Enviar el mensaje cuando pedido está listo
 	public void mousePressed() {
 		for (int i = 0; i < food.size(); i++) {
 
-			if (mouseX > x && mouseX < x + 140 && 
-				mouseY > x + (130 * i) && mouseY < y + (130 * i) + 212) {
+			if (mouseX > x + (180 * i) && mouseX < x + (180 * i) + 140 && 
+					mouseY > y && mouseY < y + 212) {
 				UDP.sendMessage("Su " + food.get(i).getItem() + " ya está listo");
-				
-				numOrder=numOrder-1;
-				
+
+				numOrder = numOrder - 1;
+
 				food.remove(i);
 			}
 
@@ -76,30 +75,33 @@ public class Main extends PApplet implements onMessage {
 	// Interface de patron observer
 	@Override
 	public void onMessageReceived(String item) {
-		
-		numOrder++;
-		int number = numOrder;
-		
-		Calendar c = Calendar.getInstance();
-		Date date = c.getTime();
-		
-	//	String item, PImage image, PApplet app, int numOrder, String time
-		
-		switch (item) {
-		case "JUICE":
-			food.add(new Food(item, juice, this, number, date));
-			break;
-		case "SANDWICH":
-			food.add(new Food(item, juice, this, number, date));
-			break;
-		case "YOGURT":
-			food.add(new Food(item, juice, this, number, date));
-			break;
-		case "HOTDOG":
-			food.add(new Food(item, juice, this, number, date));
-			break;
-		default:
-			break;
+		if (numOrder < 6) {
+			numOrder++;
+			int number = numOrder;
+
+			Calendar c = Calendar.getInstance();
+			Date date = c.getTime();
+
+			// String item, PImage image, PApplet app, int numOrder, String time
+
+			switch (item) {
+			case "JUICE":
+				food.add(new Food(item, juice, this, number, date));
+				break;
+			case "SANDWICH":
+				food.add(new Food(item, sandwich, this, number, date));
+				break;
+			case "YOGURT":
+				food.add(new Food(item, yogurt, this, number, date));
+				break;
+			case "HOTDOG":
+				food.add(new Food(item, hotdog, this, number, date));
+				break;
+			default:
+				break;
+			}
+		} else {
+			System.out.println("Muchos pedidoooos");
 		}
 	}
 

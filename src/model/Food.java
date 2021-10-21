@@ -36,8 +36,8 @@ public class Food {
 	public void draw(int x, int y) {
 		app.fill(255);
 		app.textSize(18);
-		app.text("Pedido #" +numOrder, x+150, y+50);
-		app.text("Hora: " +time, x+150, y+90);
+		app.text("Pedido #" +numOrder, x, y+240);
+		app.text("Hora: " +time, x, y+260);
 		
 		app.image(image, x, y);
 
