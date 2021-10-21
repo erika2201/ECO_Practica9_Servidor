@@ -1,6 +1,8 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import events.onMessage;
 import model.Food;
@@ -16,11 +18,11 @@ public class Main extends PApplet implements onMessage {
 
 	private PImage bg;
 	UDPConection UDP;
-	PImage juice, sandwich, yogurt, hotdog;
+	private PImage juice, sandwich, yogurt, hotdog;
 
 	// Para pintar el pedido del cliente
 	private ArrayList<Food> food;
-	private int x, y;
+	private int x, y, numOrder;
 
 	public void settings() {
 		size(1200, 700);
@@ -41,6 +43,7 @@ public class Main extends PApplet implements onMessage {
 		food = new ArrayList<Food>();
 		x = 85;
 		y = 130;
+		numOrder = 0;
 	}
 
 	public void draw() {
@@ -61,6 +64,8 @@ public class Main extends PApplet implements onMessage {
 				mouseY > x + (130 * i) && mouseY < y + (130 * i) + 212) {
 				UDP.sendMessage("Su " + food.get(i).getItem() + " ya está listo");
 				
+				numOrder=numOrder-1;
+				
 				food.remove(i);
 			}
 
@@ -71,18 +76,27 @@ public class Main extends PApplet implements onMessage {
 	// Interface de patron observer
 	@Override
 	public void onMessageReceived(String item) {
+		
+		numOrder++;
+		int number = numOrder;
+		
+		Calendar c = Calendar.getInstance();
+		Date date = c.getTime();
+		
+	//	String item, PImage image, PApplet app, int numOrder, String time
+		
 		switch (item) {
 		case "JUICE":
-			food.add(new Food(item, juice, this));
+			food.add(new Food(item, juice, this, number, date));
 			break;
 		case "SANDWICH":
-			food.add(new Food(item, sandwich, this));
+			food.add(new Food(item, juice, this, number, date));
 			break;
 		case "YOGURT":
-			food.add(new Food(item, yogurt, this));
+			food.add(new Food(item, juice, this, number, date));
 			break;
 		case "HOTDOG":
-			food.add(new Food(item, hotdog, this));
+			food.add(new Food(item, juice, this, number, date));
 			break;
 		default:
 			break;
